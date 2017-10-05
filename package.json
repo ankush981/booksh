@@ -1,6 +1,6 @@
 {
-  "name": "manime",
-  "description": "Anime Store using Vuex",
+  "name": "micon",
+  "description": "Simple Icon Search and Management",
   "version": "1.0.0",
   "author": "Ankush <ankush.thakur53@gmail.com>",
   "private": true,
