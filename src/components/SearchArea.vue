@@ -14,7 +14,11 @@
         },
         methods: {
             newSearch() {
-                console.log('I got clicked!');
+                if(!this.searchTerm) {
+                    return;
+                }
+                this.$store.dispatch('searchForBooks', this.searchTerm);
+                this.searchTerm = '';
             }
         }
     }
