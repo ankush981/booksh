@@ -2,6 +2,7 @@
     <div>
         <input type="text" v-model='searchTerm' placeholder="Type search here"> 
         <button @click="newSearch">Search</button>
+        <div v-if="showSearchTerm">Showing results for "{{ searchTerm }}"</div>
     </div>
 </template>
 
@@ -9,7 +10,8 @@
     export default {
         data() {
             return {
-                searchTerm: ''
+                searchTerm: '',
+                showSearchTerm: false
             }
         },
         methods: {
@@ -18,7 +20,7 @@
                     return;
                 }
                 this.$store.dispatch('searchForBooks', this.searchTerm);
-                this.searchTerm = '';
+                this.showSearchTerm = true;
             }
         }
     }
