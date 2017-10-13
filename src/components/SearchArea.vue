@@ -19,7 +19,7 @@
                 if(!this.searchTerm) {
                     return;
                 }
-                this.$store.dispatch('searchForBooks', this.searchTerm);
+                this.$store.dispatch('newSearchForBooks', this.searchTerm);
                 this.showSearchTerm = true;
             }
         }
