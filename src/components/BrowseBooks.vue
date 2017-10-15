@@ -1,23 +1,25 @@
 <template>
     <div>
-        <h3 v-if="!booksAvailable">No books found</h3>
+        <h3 v-if="!books.length">No books found</h3>
+        <div v-else>
+            <div v-for="book in books">
+                <single-book :book="book"></single-book>
+            </div>
+        </div>     
     </div>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+    import SingleBook from './SingleBook.vue';
+
     export default {
-        data() {
-            return {
-                
-            }
+        components: {
+            SingleBook: SingleBook
         },
         computed: {            
-            books: function() {
+            books() {
                 return this.$store.getters.getBooksForCurrentPage;
-            },
-
-            booksAvailable: function() {
-                return this.books.length != 0;
             }
         }
     }
