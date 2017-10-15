@@ -9,99 +9,105 @@ export default new Vuex.Store({
         // Note: Gets reset when new search is issued
         bookCache: [],
         searchTerm: '',
-        currentPage: 0,
-        favoriteBooks: [],
+        currentPage: 1,
         apiBaseUrl: 'https://www.googleapis.com/books/v1/volumes'
     },
+
     mutations: {
-        'ADD_NEW_PAGE' (state, books) {
-            if(books) {
-                state.paginatedBooks.push(books);
-            }
+        'ADD_BOOKS' (state, books) {
+            state.bookCache.push(books);
         },
+
+        'ADD_TO_FAVORITES' (state, id) {
+
+        },
+
         'REMOVE_FROM_FAVORITES' (state, id) {
-            if(!favoriteBooks) {
-                return;
-            }
 
-            var locatedAtIndex = null;
-            var totalFavorites = state.favoriteBooks.length;
-
-            for (var i = 0; i < totalFavorites; i++) {
-                if (state.favoriteBooks[i].id === id) {
-                    locatedAtIndex = i;
-                }
-            }
-
-            // not found -- shouldn't ever happen!
-            if(locatedAtIndex === null) {
-                return;
-            }
-
-            // chop off!
-            state.favoriteBooks.splice(locatedAtIndex, 1);
         },
-        'ADD_TO_FAVORITES' (state, icon) {
-            if (icon) {
-                state.favoriteBooks.push(icon);
-            }
-        },
+
         'EMPTY_CACHE' (state) {
             state.bookCache = [];
         },
+
         'PAGE_NEXT' (state) {
-            state.pageNumber++;
+            state.currentPage++;
         },
-        'PAGE_BACK' (state) {
-            state.pageNumber--;
+
+        'PAGE_PREV' (state) {
+            state.currentPage--;
+        },
+
+        'RESET_SEARCHED_BOOKS' (state) {
+            state.currentPage = 0;
+            state.bookCache = [];
+            state.searchTerm = '';
+        },
+
+        'SET_INITIAL_BOOKS' (state, books) {
+            state.currentPage = 1;
+            state.bookCache[0] = books;
+        },
+
+        'SET_SEARCH_TERM' (state, term) {
+            state.searchTerm = term;
         }
     },
     actions: {
-        removeFromFavorites: (state, id) => {
-            this.$store.commit('REMOVE_FROM_FAVORITES', id);
+        addToFavorites: (context, id) => {
+            context.commit('ADD_TO_FAVORITES', id);
+        },
+
+        removeFromFavorites: (context, id) => {
+            context.commit('REMOVE_FROM_FAVORITES', id);
         },
         
-        searchForBooks: (state, term) => {
-            console.log('Going to search for: ' + term);
-            this.$store.commit('EMPTY_CACHE');
-            this.$store.commit('PAGE_NEXT');
+        newSearchForBooks: (context, term) => {
+            context.commit('RESET_SEARCHED_BOOKS');
+            context.commit('SET_SEARCH_TERM', term);
+            context.dispatch('addNewPageOfBooks');                          
         },
 
-        fetchBooksFromApi: (state) => {
-            if(!state.currentPage) {
-                return [];
-            }
+        addNewPageOfBooks: (context) => {
+            context.commit('PAGE_NEXT');
 
-            // See if we can load from cache
-            var cachedBooks = state.bookCache[state.currentPage - 1];
-            
-            if(cachedBooks) {
-                return cachedBooks;
-            }
-
-            // othewise, send request to API
-            var url = state.apiBaseUrl + 'q=' + state.searchTerm + '&page=' + state.currentPage;
+            var url = context.state.apiBaseUrl + '?q=' + context.state.searchTerm + '&page=' 
+                        + context.state.currentPage;
 
             Vue.axios.get(url).then((response) => {
-                console.log(response.data)
+                context.commit('ADD_BOOKS', response.data.items);
             });            
         },
-        gotoNextPage: (state) => {
-            // go to next page only if cache data exists for current page
-            if(state.cachedBooks[state.currentPage - 1]) {
-                this.$store.commit('PAGE_NEXT');
+
+        gotoNextPage: (context) => {
+            // Go to next page only if cache data exists for current page
+            // In other words, if the current page is blank, hitting Next
+            // shouldn't do anything
+            if(state.bookCache[state.currentPage - 1]) {
+                context.commit('PAGE_NEXT');
+                context.disptch('addNewPageOfBooks');
             }
         },
-        gotoPreviousPage: (state) => {
+
+        gotoPreviousPage: context => {
             if(state.currentPage > 0) {
-                this.$store.commit('PAGE_BACK');
+                context.commit('PAGE_PREV');
             }
         }
     },
     getters: {
-        getBooksForCurrentPage: (state) => {
+        getBooksForCurrentPage: state => {
+            if (state.bookCache == []) {
+                return [];
+            }
+
             var books = state.bookCache[state.currentPage - 1];
-            return books ? books : [];
-        },    
+
+            if (!books) {
+                return [];
+            }
+
+            return books;
+        },
     }
 });
