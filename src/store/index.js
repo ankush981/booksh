@@ -9,7 +9,7 @@ export default new Vuex.Store({
         // Note: Gets reset when new search is issued
         bookCache: [],
         searchTerm: '',
-        currentPage: 1,
+        currentPage: 0,
         apiBaseUrl: 'https://www.googleapis.com/books/v1/volumes'
     },
 
@@ -109,5 +109,9 @@ export default new Vuex.Store({
 
             return books;
         },
+
+        getCurrentPage: state => {
+            return state.currentPage;
+        }
     }
 });
