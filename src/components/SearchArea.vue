@@ -3,7 +3,7 @@
         <div id="search-area">
             <input type="text" v-model='searchTerm' class="search-box"> 
             <button @click="newSearch" class="search-button">Search</button>
-            <div v-if="showSearchTerm">Showing results for "{{ searchTerm }}"</div>
+            <div v-if="showSearchTerm" class="show-search-term">Showing results for "{{ searchTerm }}"</div>
         </div>
     </div>
 </template>
@@ -37,11 +37,11 @@
 
     .search-box {
         display: inline-block;
-        font-size: 2em;
+        font-size: 1.4em;
         font-family: Merriweather;
         color: #555;
         border: 1px solid #BBB;
-        height: 40px;
+        padding: 5px;
     }
 
     .search-button {
@@ -50,7 +50,11 @@
         font-family: Merriweather;
         color: #555;
         padding: 6px;
-        position: relative;
-        top: -4px;
+    }
+
+    .show-search-term {
+        margin: 20px auto;
+        font-style: italic;
+        color: #555;
     }
 </style>
