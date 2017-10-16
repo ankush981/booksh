@@ -23,8 +23,12 @@ export default {
 
 <style>
     /* global styling */
+    @import url('https://fonts.googleapis.com/css?family=Merriweather');
+
     body {
         color: #333;
+        background-color: #f5f5dc;
         padding: 20px;
+        font-family: Merriweather, serif;
     }
 </style>
