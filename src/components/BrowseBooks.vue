@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3 v-if="!books.length">No books found</h3>
+        <h3 v-if="!books.length && searchTerm">No books found</h3>
         <div v-else>
             <div v-for="book in books">
                 <single-book :book="book"></single-book>
@@ -17,9 +17,14 @@
         components: {
             SingleBook: SingleBook
         },
+
         computed: {            
             books() {
                 return this.$store.getters.getBooksForCurrentPage;
+            },
+
+            searchTerm() {
+                return this.$store.state.searchTerm;
             }
         }
     }
