@@ -53,7 +53,7 @@
     }
 
     .show-search-term {
-        margin: 20px auto;
+        margin: 40px auto;
         font-style: italic;
         color: #555;
     }
