@@ -70,10 +70,9 @@ export default new Vuex.Store({
 
         addNewPageOfBooks: (context) => {
             context.commit('PAGE_NEXT');
-
-            var url = context.state.apiBaseUrl + '?q=' + context.state.searchTerm + '&page=' 
-                        + context.state.currentPage;
-
+            var url = context.state.apiBaseUrl + '?q=' + context.state.searchTerm + '&startIndex=' 
+                        + ((context.state.currentPage - 1) * 10 + 1);
+            console.log(url);
             Vue.axios.get(url).then((response) => {
                 context.commit('ADD_BOOKS', response.data.items);
             });            
@@ -83,18 +82,19 @@ export default new Vuex.Store({
             // Go to next page only if cache data exists for current page
             // In other words, if the current page is blank, hitting Next
             // shouldn't do anything
-            if(state.bookCache[state.currentPage - 1]) {
-                context.commit('PAGE_NEXT');
-                context.disptch('addNewPageOfBooks');
+            if(context.state.bookCache[context.state.currentPage - 1]) {
+                context.dispatch('addNewPageOfBooks');
             }
         },
 
         gotoPreviousPage: context => {
-            if(state.currentPage > 0) {
+            // if we are on first page, we of course can't paddle back to 0th page
+            if(context.state.currentPage > 1) {
                 context.commit('PAGE_PREV');
             }
         }
     },
+
     getters: {
         getBooksForCurrentPage: state => {
             if (state.bookCache == []) {
