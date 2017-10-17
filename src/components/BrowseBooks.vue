@@ -3,7 +3,7 @@
         <h3 v-if="!books.length && searchTerm">No books found</h3>
         <div v-else>
             <div v-for="book in books">
-                <single-book :book="book"></single-book>
+                <single-book v-if="book" :book="book"></single-book>
             </div>
         </div>     
     </div>
