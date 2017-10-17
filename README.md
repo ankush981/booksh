@@ -1,18 +1,7 @@
-# manime
+# Booksh!
 
-> Anime Store using Vuex
+## A simple book search and management app written in Vue.js (with Vuex) and Google Books API
 
 ## Build Setup
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+Demo here: http://booksh.bitballoon.com/
