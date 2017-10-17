@@ -46,6 +46,7 @@
         margin-bottom: 20px;
         max-width: 600px;
         border: 2px solid #DDD;
+        background-color: #fcffe5;
     }
 
     .book-listing img {
