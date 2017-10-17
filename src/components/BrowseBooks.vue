@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3 v-if="!books.length && searchTerm">No books found</h3>
+        <h3 v-if="!books.length && searchTerm && !currentlySearching">No books found</h3>
         <div v-else>
             <div v-for="book in books">
                 <single-book v-if="book" :book="book"></single-book>
@@ -25,6 +25,10 @@
 
             searchTerm() {
                 return this.$store.state.searchTerm;
+            },
+
+            currentlySearching() {
+                return this.$store.state.currentlySearching;
             }
         }
     }

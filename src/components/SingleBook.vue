@@ -11,7 +11,7 @@
         </div>
         
         
-        <div class="book-description" v-html="book.searchInfo.textSnippet">
+        <div class="book-description" v-if="book.searchInfo" v-html="book.searchInfo.textSnippet">
         </div>
 
         <div class="book-end-marker"></div>

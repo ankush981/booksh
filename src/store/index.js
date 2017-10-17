@@ -10,6 +10,7 @@ export default new Vuex.Store({
         bookCache: [],
         searchTerm: '',
         currentPage: 0,
+        currentlySearching: false, //are we currently in the middle of an Ajax call?
         apiBaseUrl: 'https://www.googleapis.com/books/v1/volumes'
     },
 
@@ -51,7 +52,16 @@ export default new Vuex.Store({
 
         'SET_SEARCH_TERM' (state, term) {
             state.searchTerm = term;
+        },
+
+        'START_SEARCH' (state) {
+            state.currentlySearching = true;
+        },
+
+        'END_SEARCH' (state) {
+            state.currentlySearching = false;
         }
+
     },
     actions: {
         addToFavorites: (context, id) => {
@@ -72,9 +82,13 @@ export default new Vuex.Store({
             context.commit('PAGE_NEXT');
             var url = context.state.apiBaseUrl + '?q=' + context.state.searchTerm + '&startIndex=' 
                         + ((context.state.currentPage - 1) * 10 + 1);
+
             console.log(url);
+
+            context.commit('START_SEARCH');
             Vue.axios.get(url).then((response) => {
                 context.commit('ADD_BOOKS', response.data.items);
+                context.commit('END_SEARCH');
             });            
         },
 
